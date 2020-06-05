@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button id="btn">点击</button>
+    <button id="btn2">点击</button>
+    <script src="../static/js/jquery.min.js"></script>
+    <script>
+    var notify=null
+        $("#btn").click(function(){
+            var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+            console.log(Notification)
+             Notification.requestPermission(function(result){
+             console.log(result)
+             if("granted" != result){
+                alert('请授权浏览器能够进行通知!');
+                return false;
+                }else{
+                    var tag = "sds"+Math.random();
+                    notify = new Notification('标题',
+                        {
+                          dir:'auto',
+                          lang:'zh-CN',
+                          tag:tag,//实例化的notification的id
+                          //icon:imgUrl,//通知的缩略图,icon 支持ico、png、jpg、jpeg格式
+                          title:'这是标题', //通知的标题
+                          body:'这是内容' //通知的具体内容
+                        }
+                    );
+                 }
+             })
+        })
+        $("#btn2").click(function(){
+            notify.close()
+        })
+
+    </script>
+</body>
+
+</html>

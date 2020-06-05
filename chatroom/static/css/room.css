@@ -1,0 +1,77 @@
+body{
+    background: url(../bgimg/6.jfif) ;
+    background-repeat:no-repeat;/*图片适应窗口大小，这里设置的是不进行平铺*/
+    background-attachment: fixed;/*图片相对于浏览器固定,这里设置背景图片固定，不随内容滚动*/
+    background-origin: border-box;/*从边框区域显示*/
+    background-size:cover;
+}
+.container{
+    margin: 3% auto;
+    width: 70%;
+    height: calc(80vh);
+    background-color: bisque;
+    border-radius: 15px;
+}
+header{
+    height: 8%;
+    font-size: 30px;
+    font-weight: bold;
+    background-color: bisque;
+}
+.row:first-of-type{
+    height: 70%;
+}
+.row:last-of-type{
+    height: 20%;
+    margin-top: 1%;
+    padding-bottom: 0;
+}
+.col-md-4,.col-md-8{
+    overflow: auto;
+    height:100% ;
+}
+textarea{
+    margin-top: 1%;
+    resize: none;
+}
+#btn{
+    float: right;
+}
+.bubble{
+    background-color: green;
+    color: black;
+    border-radius: 20px 20px 20px 0;
+    width: 70%;
+    /* height: 20px; */
+    font-size: 20px;
+    padding: 3%;
+}
+.speaker{
+    font-size: 18px;
+    position: relative;
+    left:5%;
+}
+.rebubble{
+    background-color: green;
+    color: black;
+    border-radius: 20px 20px 0 20px;
+    width: 70%;
+    /* height: 20px; */
+    font-size: 20px;
+    padding: 3%;
+    position: relative;
+    right: -30%;
+}
+.respeaker{
+    font-size: 18px;
+    position: relative;
+    right:-5%;
+}
+
+#modify{
+    width: 40%;
+    background-color: beige;
+    padding: 3%;
+    display: block;
+    border-radius: 15px;
+}

@@ -1,0 +1,117 @@
+body{
+    background: url(../bgimg/7.jfif) ;
+    background-repeat:no-repeat;/*图片适应窗口大小，这里设置的是不进行平铺*/
+    background-attachment: fixed;/*图片相对于浏览器固定,这里设置背景图片固定，不随内容滚动*/
+    background-origin: border-box;/*从边框区域显示*/
+    background-size:cover;
+}
+div{
+     /* border: 1px solid red; */
+}
+#main{
+    background-color: beige;
+    width: 1000px;
+    height: 90%;
+    border-radius: 10px;
+    position: absolute;
+    left: 15%;
+    margin: 2% auto;
+}
+#left{
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    overflow: auto;
+}
+#right{
+    width: 700px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    overflow: auto;
+}
+.room{
+    background-color: bisque;
+    margin: 8%;
+    padding: 5%;
+    border-radius: 10px;
+}
+ #room_name{
+    font-size: 20px;
+    font-weight: bolder;
+} 
+.owner{
+    margin-top: 10%;
+    margin-left: 7%;
+}
+#content{
+    width: 100%;
+    height: 50%;
+}
+#introduce_name{
+    border: 1px solid red;
+    background-color: bisque;
+    width: 80%;
+    /* height: 30%; */
+    margin: 10% auto;
+    border-radius: 10px;
+}
+#introduce{
+    width: 80%;
+    height: 50%;
+    margin: 8% auto;
+    border: 1px solid red;
+    border-radius: 10px;
+    background-color: bisque;
+}
+
+#iro{
+    margin: 10px 30px;
+}
+#irn{
+    margin: 10px 20px;
+    font-size: 30px;
+    font-weight: bolder;
+}
+#introduce_name>#iron{
+    margin: 20px;
+    position: relative;
+    left: 60px;
+    font-weight: bold;
+}
+
+#in{
+    margin: 2%;
+}
+#ic{
+    height: 75%;
+    margin: 2%;
+}
+#in_btn{
+    /* width: 90%; */
+    height: 9%;
+    position: absolute;
+    bottom: 10%;
+    left: 0%;
+    /* margin: auto ; */
+}
+#logout{
+    position: absolute;
+    right:0;
+    top:0
+}
+#new_room,#modify{
+    width: 40%;
+    background-color: beige;
+    padding: 3%;
+    display: block;
+    border-radius: 15px;
+}
+#r_name,#r_intro{
+    margin: 2%;
+    resize:none
+}
+#n_btn{
+    margin: 3% 2%;
+}

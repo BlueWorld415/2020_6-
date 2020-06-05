@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>主页</title>
+		<link rel="stylesheet" href="../../static/css/index.css">
+		<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+		<script src="../../static/js/jquery.min.js"></script>
+		<script src="../../static/js/bootstrap.min.js"></script>
+		<style>
+		
+		
+	</style>
+	</head>
+	<body>
+		<div id="main">
+			<div id="left">
+				<div class="username btn btn-block " id='btn_modify'>
+					<h2 id="uname">用户名称</h2>
+				</div>
+				<button id='btn_new' class="btn btn-info btn-block">创建新聊天室</button ><!--
+				<div class="room">
+					<span id="room_name">聊天室名称</span>
+					<div class="owner" style="border: 0px;">
+						<span id="own">聊天室管理员：</span>
+						<span id="owner_id">123465</span>
+					</div>
+				</div>
+				 -->
+			</div>
+			<div id="right">
+				<!-- <div id="content">
+					<div id="introduce_name">
+						<div id="irn">
+							聊天室名称
+						</div>
+						<div id="iro">
+							聊天室管理员：
+						</div>
+						<div id="iron">name
+						</div>
+					</div>
+					<div id="introduce">
+						<div id="in">聊天室简介:</div>
+						<div id='ic'>无</div>
+					</div>
+				</div>
+				<button type="button" id="in_btn" class="btn btn-block">进入聊天室</button> -->
+			</div>
+			<button class="btn btn-warning" id="logout">退出登录</button>
+		</div>
+		<div id="new_room" class="center-block">
+			<form>
+				<div class="form_group">
+					<label for='r_name'>请输入聊天室名称:</label>
+
+					<input type="text" id="r_name" class="form-control" />
+				</div>
+				<div class="from_group">
+					<lable for="r_intro">请输入聊天室简介:</lable>
+					<textarea rows="" cols="" class="form-control" id="r_intro"></textarea>
+				</div>
+				<button type="button" class="btn btn-info btn-block" id="n_btn">提交</button>
+				<button type="button" class="btn btn-danger btn-block cancel">取消</button>
+			</form>
+		</div>
+		<div id="modify" class="center-block">
+			<form>
+				<div class="form_group">
+					<label for='n_name'>请输入新用户名:</label>
+					<input type="text" id="n_name" class="form-control">
+				</div>
+				<div class="from_group">
+					<lable for="n_pass">请输入新密码:</lable>
+					<input type="password" id="n_pass" class="form-control">
+				</div>
+				<div class="from_group">
+					<lable for="rn_pass">请重复输入新密码:</lable>
+					<input type="password" id="rn_pass" class="form-control">
+				</div>
+				<div class="form_group">
+					<label for='n_tel'>请输入手机号码:</label>
+					<input type="text" id="n_tel" class="form-control">
+					<div id="msg"></div>
+				</div>
+				<div>
+					<button type="button" class="btn btn-info btn-block" id="modify_btn">提交</button>
+					<button type="button" class="btn btn-danger btn-block cancel" >取消</button>
+				</div>
+			</form>
+			
+		</div>
+		<script>
+			
+		</script>
+		<script src="../../static/js/index.js"></script>
+		
+	</body>
+</html>

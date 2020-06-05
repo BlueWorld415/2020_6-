@@ -1,0 +1,16 @@
+body{
+    background: url(../bgimg/1.jfif) ;
+    background-repeat:no-repeat;/*图片适应窗口大小，这里设置的是不进行平铺*/
+    background-attachment: fixed;/*图片相对于浏览器固定,这里设置背景图片固定，不随内容滚动*/
+    background-origin: border-box;/*从边框区域显示*/
+    background-size:cover;
+}
+.main{
+    /* height: 30%; */
+    background-color: blanchedalmond;
+    padding:3% 5%;
+    border-radius: 15px;
+    overflow:unset;
+    position:absolute;
+    margin: 7% auto;
+}

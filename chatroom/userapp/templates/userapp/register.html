@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/register.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <style>
+   
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form row " >  
+            <div class="col-sm-6 col-xs-12 main" >
+                <div class="form-group  has-feedback">
+                    <label for="username" >用户名:</label>
+                    <input type="text" id="username" placeholder="请输入用户名" class="form-control"><br>
+                    <span id="uname_msg"></span></div>
+                    
+                <div> 
+                <div class="form-group">
+                    <label for="password">密码:</label>
+                    <input type="password" id="password" placeholder="请输入用密码" class="form-control"><br>
+                    <span id="pwd_msg"></span>
+                </div>
+                <div> 
+                <div class="form-group">
+                    <label for="re_password">重复密码:</label>
+                    <input type="password" id="re_password" placeholder="请再输入一次密码" class="form-control"><br>
+                    <span id="rpwd_msg"></span>
+                </div>
+                <div>
+                <div class="form-group">
+                    <label for="telnumber">手机号:</label>
+                    <input type="text" id="telnumber" placeholder="请输入手机号" class="form-control"><br>
+                    <span id="tel_msg"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info form-control" id='btn_register'>注册</button>
+                </div>
+            </div>
+        </div>  
+    </div>
+    <script src="../static/js/register.js"></script>
+    <script>
+    $('#telnumber').blur(function(){
+        tel=$('#telnumber').val();
+        if(tel){
+            $.ajax({
+             type: "get",
+             url: 'http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='+tel,
+             dataType: "jsonp",
+             jsonp: "callback",
+             success: function(data){
+                console.log(data);
+                if(data.province){
+                    $("#tel_msg").html('手机号无误').css('color','green')
+                }else{
+                    $("#tel_msg").html('手机号无效').css('color','red')
+                }
+             },
+             error:function (e){    
+                console.log(e)      
+             }
+         });
+        }
+    });
+    </script>
+    </body>  
+</body>
+</html>

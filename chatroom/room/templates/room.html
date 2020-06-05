@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/room.css">
+    <!-- <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <title>{{ roomname }}</title>
+
+    <style>
+        .list-group-item {
+            padding: 5px;
+        }
+
+        #leave {
+            float: left;
+        }
+
+        #dissolution,
+        #send_notice,
+        .give {
+            float: right;
+            display: none;
+        }
+
+        .out {
+            position: relative;
+            left: 0;
+            display: none;
+        }
+
+        #send_notice_window,
+        #notices_window {
+            width: 40%;
+            background-color: beige;
+            padding: 3%;
+            display: block;
+            border-radius: 15px;
+        }
+
+        #send_notice_window textarea {
+            margin: 5% 0;
+        }
+
+        .remove_files {
+            float: right;
+            padding: 0 1%;
+            display: none;
+        }
+
+        #notices_window {
+            width: 60%;
+
+        }
+
+        .notices {
+            padding: 5%;
+            margin: 5%
+        }
+
+        .notices span {
+            font-size: 10px;
+            float: right;
+        }
+
+        .give {
+            padding: 0 1%;
+
+        }
+
+        .row:last-of-type {
+            height: 20%;
+        }
+
+        .container {
+            height: calc(85vh);
+        }
+
+        #owner_status {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <span id='owner_status'>{{ owner_online }}</span>
+    <!-- <button class="btn btn-danger" id="test">测试</button> -->
+    <div class="container">
+        <button class="btn btn-danger" id="dissolution">解散聊天室</button>
+        <button class="btn btn-info" id="send_notice">发布公告</button>
+        <button class="btn btn-warning" id="leave">退出聊天室</button>
+        <header class="text-center">
+            {{ roomname }}
+        </header>
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4" id="user_list">
+                <div class="username btn btn-block " id='btn_modify'>
+                    <h2 id="uname">{{ username }}</h2>
+                    <a>点击修改个人信息</a>
+
+                </div>
+                <div>
+                    聊天室成员列表
+                </div>
+                <div class="list-group" id="users-list">
+
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-8" id="chat_record">
+                <div class="item" style='display: none;'>
+                    <span class="speaker">说话的人</span>
+                    <div class='bubble'>这个是测试用的气泡</div>
+                </div>
+                <div id="bottom"></div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4" id="file_list">
+                <div>文件列表</div>
+                <div class="list-group" id="files-list">
+                    <!-- <li class="list-group-item">
+                        <a href='/static/files/hello.py' download="hello.py">这个是测试用的</a>
+                        <div class="glyphicon glyphicon-remove btn remove_files btn-danger"></div>
+                    </li> -->
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-8" id="text_area">
+                <textarea class="form-control" style="height: 60%;" onkeydown="checkEnter(event)"></textarea>
+                <button id="btn" class="btn btn-info">发送</button>
+                <!--                <form action="/upload" method="post"  enctype="multipart/form-data" id='upform'>-->
+                <form method="post" enctype="multipart/form-data" id='upform'>
+                    <div class="glyphicon glyphicon-floppy-open btn" id='upload'></div>
+                    <input type='file' name='myfile' id='up' style="display: none;">
+                    <div class="glyphicon glyphicon-th-list btn" id='notices'></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="modify" class="center-block">
+        <form>
+            <div class="form_group">
+                <label for='n_name'>请输入新用户名:</label>
+                <input type="text" id="n_name" class="form-control">
+            </div>
+            <div class="from_group">
+                <lable for="n_pass">请输入新密码:</lable>
+                <input type="password" id="n_pass" class="form-control">
+            </div>
+            <div class="from_group">
+                <lable for="rn_pass">请重复输入新密码:</lable>
+                <input type="password" id="rn_pass" class="form-control">
+            </div>
+            <div class="form_group">
+                <label for='n_tel'>请输入手机号码:</label>
+                <input type="text" id="n_tel" class="form-control">
+                <div id="msg"></div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-info btn-block" id="modify_btn">提交</button>
+                <button type="button" class="btn btn-danger btn-block cancel">取消</button>
+            </div>
+        </form>
+    </div>
+    <div id="send_notice_window" class="center-block">
+        <lable>发布公告：</lable>
+        <textarea class="form-control" id='notice'></textarea>
+        <button id='send' class="btn btn-block btn-info">发布</button>
+        <button class="btn btn-block btn-danger" id='no_send'>取消</button>
+    </div>
+    <div id='notices_window' class="center-block" style="display: none">
+        <label>所有公告</label>
+        <div class="list-group" id="notices-list"></div>
+        <button class="btn btn-block btn-warning" id='back'>返回</button>
+    </div>
+
+    <script>
+        function checkEnter (e){
+            var et = e || window.event;
+            var keycode = et.charCode || et.keyCode;
+            if (keycode == 13) {
+                console.log('enter')
+                if (window.event) {
+                    window.event.returnValue = false;
+                } else {
+                    e.preventDefault(); //for firefox
+                }
+                $.ajax({
+                    url: '/chat',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        msg: 'say',
+                        message: $("textarea").val()
+                    }),
+                    success: function () {
+                        get_users()
+
+                    }
+                })
+                $("textarea").val('')
+            }
+
+        }
+
+        $("#modify").hide()
+        $("#send_notice_window").hide()
+        $("#btn_modify").click(function () {
+            $(".container").fadeOut(100)
+            $("#modify").fadeIn(100)
+        })
+        $(".cancel").click(function () {
+            $("#modify").fadeOut(100)
+            $(".container").fadeIn(100)
+        })
+        $("#no_send").click(function () {
+            $("#send_notice_window").fadeOut(100)
+            $(".container").fadeIn(100)
+        })
+        $("#back").click(function () {
+            $("#notices_window").css('display', 'none')
+            $(".container").fadeIn(100)
+        })
+        console.log($("#owner_status").html())
+        var owner_online = $("#owner_status").html()
+        if (owner_online=='true') {
+            $("#dissolution").css('display', 'block')
+            $("#send_notice").css('display', 'block')
+            // $(".give").css('display', 'block').on('click',fun_give)
+            // $(".out").css('display', 'inline-block').on('click',fun_out)
+            // $(".remove_files").css('display', 'block').on('click',fun_rmfiles)
+
+        }
+        var user = null;
+        var owner = null;
+        var notify = null;
+        var users_list = [];
+        $("#send_notice").click(function () {
+            $(".container").fadeOut(90);
+            $("#send_notice_window").fadeIn(100)
+        })
+        $('#modify_btn').click(function () {
+            $.ajax({
+                url: '/user/modify',
+                type: 'post',
+                dataType: 'json',
+                data: JSON.stringify({ username: $('#n_name').val(), password: $("#n_pass").val(), repassword: $("#rn_pass").val(), tel: $("#n_tel").val() }),
+                contentType: "application/json",
+                success: function (res) {
+                    console.log(res);
+                    if (res['code'] == 200) {
+                        console.log('yes')
+                        $("#msg").html('修改成功').css('color', 'green')
+                        location.reload()
+                    }
+                }
+            })
+        })
+        $("#upload").click(function () {
+            f = $('#up')
+            f.click()
+            f.change(function () {
+                console.log(f[0].files[0])
+                var formdata = new FormData();
+                formdata.append('file', f[0].files[0])
+                $.ajax({
+                    url: '/upload',
+                    type: 'post',
+                    data: formdata,
+                    processData: false,// 不处理数据
+                    contentType: false,// 不设置内容类型，按原格式传输
+                    success: function (res) {
+                        console.log(res)
+                        notify.close()
+                    },
+                    beforeSend: function () {
+                        notify = new Notification(
+                            '上传文件',
+                            {
+                                dir: 'auto',
+                                lang: 'zh-CN',
+                                tag: 0,//实例化的notification的id
+                                title: '上传文件', //通知的标题
+                                body: '文件正在上传请不要刷新浏览器哦' //通知的具体内容
+                            }
+                        );
+                    }
+
+
+                })
+            })
+        })
+        $("#leave").click(function () {
+            $.ajax({
+                url: 'leave',
+                type: "get",
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res)
+                    if (res['code'] = 200) {
+                        window.location.href = '/index'
+                    } else {
+                        console.log(res)
+                    }
+                }
+            })
+        })
+        $("#dissolution").click(function () {
+            var r = confirm('解散聊天室将同时删除聊天记录和文件.确定解散聊天室?')
+            if (r == true) {
+                console.log('true')
+                $.ajax({
+                    url: 'dissolution',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        if (res['code'] == 40) {
+                            location.reload()
+                        } else {
+                            window.location.href = '/index'
+
+                        }
+
+                    }
+                })
+            } else {
+                console.log('false')
+
+            }
+        })
+        function fun_out() {
+            // console.log($(this).next('span')[0].innerText)
+            var outname = $(this).next('span')[0].innerText
+            var c = confirm('是否将' + outname + '踢出当前聊天室？')
+            if (c) {
+                
+                if (users_list.splice(outname)) {
+                    
+                    $.ajax({
+                        url: '/roomuser/out?name=' + outname,
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res)
+                        }
+                    })
+                    showNotification('踢出' + outname, '您将' + outname + '踢出了聊天室', '')
+                } else {
+                    showNotification('踢出失败', outname + '已经不在当前聊天室', '')
+                }
+            }
+        }
+        function fun_give() {
+            // console.log($(this).parent().text())
+            tname = $(this).parent().text()
+            r = confirm('是否确认将群管理权转让给' + tname + '?')
+            if (r) {
+                $.ajax({
+                    url: 'roomuser/transfer',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'tname': tname }),
+                    success: function (res) {
+                        console.log(res)
+                        location.reload()
+                    }
+                })
+            }
+        }
+        function fun_rmfiles() {
+            // console.log($(this).attr('id'))
+            var r = confirm('是否将此文件删除？')
+            if (r) {
+                $.ajax({
+                    url: '/files/remove?file_id=' + $(this).attr('id'),
+                    tyep: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        showNotification('删除文件', '文件删除成功', '')
+                        console.log(res)
+                    }
+
+                })
+            } else {
+                console.log('cancle remove files')
+            }
+
+        }
+        $(document).ready(function () {
+            //set user
+            $.ajax({
+                url: 'roomuser/set',
+                type: 'get',
+                dataType: 'json',
+                async: 'false',
+                success: function (res) {
+                    console.log(res)
+                    if (res['code'] == 404) {
+                        var d = alert('您被踢出聊天室')
+                        window.location.href = '/index'
+                    }
+
+
+                }
+            })
+
+            function get_users() {
+                $.ajax({
+                    url: 'roomuser/get',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        if (res['code'] == 200) {
+                            $.each(res['data'], function (i, e) {
+                                // $("#users-list").html()
+                                $("#users-list").append($("<li href='#' class='list-group-item text-center'>" + e.username +
+                                    "<div class='glyphicon glyphicon-share btn give' id='give_'" + e.id + "'></div>" +
+                                    +"</li>"))
+                                users_list.push(e.username)
+                                if (owner_online=='true') {
+                                    console.log('管理在线'+owner_online)
+                                    $(".give").unbind()
+                                    $(".out").unbind()
+                                    $(".remove_files").unbind()
+                                    $(".give").css('display', 'block').on('click', fun_give)
+                                    $(".out").css('display', 'inline-block').on('click', fun_out)
+                                    $(".remove_files").css('display', 'block').on('click', fun_rmfiles)
+                                }
+
+                            })
+
+                        }
+
+                    }
+                })
+            }
+
+
+
+            // set notices
+            $('#notices').click(function () {
+                $("#notices_window").css('display', 'block')
+                $(".container").fadeOut(90);
+                $.ajax({
+                    url: 'notice/get',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        $("#notices-list").html('')
+                        if (res['data'].length != 0) {
+                            $.each(res['data'], function (i, e) {
+                                $("#notices-list").append(
+                                    $("<li class='list-group-item notices'>" + e.content +
+                                        "<span>" + e.created_time + "</span>" +
+                                        +"</li>")
+                                )
+                            })
+                        } else {
+                            $("#notices-list").append(
+                                $("<li class='list-group-item notices'>暂时无新公告</li>")
+                            )
+                        }
+                    }
+                })
+            })
+            // set record
+            $('#send').click(function () {
+                content = $("#notice").val()
+                // console.log(content)
+                $.ajax({
+                    url: 'notice/send',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ 'content': content }),
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        location.reload()
+                    }
+
+                })
+            })
+
+            function get_record() {
+                $.ajax({
+                    url: '/chat',
+                    type: 'post',
+                    data: JSON.stringify({ msg: 'read' }),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        user = res['user']
+                        // $("#chat_record").html()
+                        owner = res['owner']
+                        if (res.data) {
+                            $.each(res.data, function (i, e) {
+                                if (user == e.user__username) {
+                                    var say = $("<div class='item'><br/><div class='rebubble'>" + e.content + "</div></div>")
+                                } else {
+                                    var say = $("<div class='item'><span class='glyphicon glyphicon-log-out btn out'></span><span class='speaker'>" + e.user__username + "</span><div class='bubble'>" + e.content + "</div></div>")
+                                }
+                                $("#bottom").before(say)
+                                var cscroll = document.getElementById('chat_record');
+                                cscroll.scrollTop = cscroll.scrollHeight;
+                                // $("#chat_record").scrollTop($('#bottom').position().top);
+
+                            })
+
+                        } else {
+                            console.log(res)
+                        }
+                    }
+                })
+            }
+
+
+            function get_files() {
+                $.ajax({
+                    url: '/files',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        $.each(res['data'], function (i, e) {
+
+                            // $("#files-list").html()
+                            $("#files-list").append(
+                                $("<li class='list-group-item text-center' id='file_li'>" +
+                                    "<a href='" + res['path'] + e.fname + "'  download='" + e.fname + "'>" + e.fname + "</a>" +
+                                    "<div class='glyphicon glyphicon-remove btn remove_files btn-danger' id='rmfile_" + e.id + "'></div>" +
+                                    "</li>")
+                            )
+
+
+                        })
+
+                    }
+
+                })
+            }
+            function get_notice() {
+                $.ajax({
+                    url: 'notice/new',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        if (res['data'].length != 0) {
+                            showNotification('新的公告', res['data'][0]['content'], '')
+                        }
+                    }
+                })
+            }
+
+            get_files()
+            get_record()
+            get_users()
+
+            $("#test").click(function () {
+                get_users()
+                get_record()
+                get_files()
+                get_notice()
+            })
+            var Intervalid = setInterval(function () {
+                get_users()
+                get_record()
+                get_files()
+                get_notice()
+                if (owner_online=='true') {
+                    $(".give").unbind()
+                    $(".out").unbind()
+                    $(".remove_files").unbind()
+                    $(".give").css('display', 'block').on('click', fun_give)
+                    $(".out").css('display', 'inline-block').on('click', fun_out)
+                    $(".remove_files").css('display', 'block').on('click', fun_rmfiles)
+
+                }
+            }, 1000)
+            
+            $("#btn").click(function () {
+                $.ajax({
+                    url: '/chat',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        msg: 'say',
+                        message: $("textarea").val()
+                    }),
+                    // beforeSend: function () {
+                    //     $("#chat_record").append(
+                    //         $("<div class='item'><br/><span class='ing glyphicon glyphicon-send'></span>" + "<div class='rebubble'>" + $("textarea").val() + "</div></div>")
+                    //     )
+                    // },
+                    success: function () {
+                        // $("-.ing").css('display', 'none');
+                        //让滚动条到最底部
+                        // $(window).scrollTop($('#botm').offset().top);
+                        //$("#chat_record").href('botm')                        
+                        // $("#chat_record").scrollTop($('#bottom').position().top);
+                        get_users()
+                        get_record()
+                        get_files()
+                        get_notice()
+                        if (owner_online=='true') {
+                            $(".give").unbind()
+                            $(".out").unbind()
+                            $(".remove_files").unbind()
+                            $(".give").css('display', 'block').on('click', fun_give)
+                            $(".out").css('display', 'inline-block').on('click', fun_out)
+                            $(".remove_files").css('display', 'block').on('click', fun_rmfiles)
+
+                        }
+
+                    }
+                })
+                $("textarea").val('')
+            })
+
+
+        })
+        function showNotification(title, msg, imgUrl) {
+            var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+            // 判断浏览器是否支持桌面通知
+            if (Notification) {
+                Notification.requestPermission(function (result) {
+                    //result 默认值'default'等同于拒绝 'denied' -用户选择了拒绝 'granted' -用户同意启用通知
+                    if ("granted" != result) {
+                        alert('请授权浏览器能够进行通知!');
+                        return false;
+                    } else {
+                        var tag = "sds" + Math.random();
+                        notify = new Notification(
+                            title,
+                            {
+                                dir: 'auto',
+                                lang: 'zh-CN',
+                                tag: tag,//实例化的notification的id
+                                icon: imgUrl,//通知的缩略图,icon 支持ico、png、jpg、jpeg格式
+                                title: title, //通知的标题
+                                body: msg //通知的具体内容
+                            }
+                        );
+                        notify.onshow = function () {
+                            setTimeout(function () {
+                                notify.close()
+                            }, 3000)
+                        }
+
+                    }
+                });
+            } else {
+                // 提示不支持系统通知
+                alert('您的浏览器不支持系统通知,建议使用Chrome浏览');
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

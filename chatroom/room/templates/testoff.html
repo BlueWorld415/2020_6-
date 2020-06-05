@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id='btn1'>显示</button>
+    <button id='btn2'>取消</button>
+
+    <script src="../../static/js/jquery.min.js"></script>
+    <script>
+        function show(){
+            console.log('1')
+        }
+        $("#btn1").on('click',show)
+        $("#btn2").on('click',function(){
+            $("#btn1").unbind()
+        })
+    </script>
+</body>
+</html>
